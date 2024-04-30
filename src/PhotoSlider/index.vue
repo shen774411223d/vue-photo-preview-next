@@ -4,15 +4,15 @@
       v-if="photoVisible"
       class="PhotoSlider__Wrapper"
       :class="{
-        'PhotoSlider__Clean': showAnimateType !== ShowAnimateEnum.None ,
-        'PhotoSlider__Hide': !overlayVisible,
+        PhotoSlider__Clean: showAnimateType !== ShowAnimateEnum.None,
+        PhotoSlider__Hide: !overlayVisible,
       }"
     >
       <div
         class="PhotoSlider__Backdrop"
         :class="{
-          'PhotoSlider__fadeIn': showAnimateType === ShowAnimateEnum.In,
-          'PhotoSlider__fadeOut': showAnimateType === ShowAnimateEnum.Out
+          PhotoSlider__fadeIn: showAnimateType === ShowAnimateEnum.In,
+          PhotoSlider__fadeOut: showAnimateType === ShowAnimateEnum.Out,
         }"
         :style="{
           background: `rgba(0, 0, 0, ${backdropOpacity})`,
@@ -21,13 +21,10 @@
       />
       <div class="PhotoSlider__BannerWrap">
         <div class="PhotoSlider__Counter">
-          {{ index + 1 }} / {{ items.length }}
+          <span v-if="!hideCounter">{{ index + 1 }} / {{ items.length }}</span>
         </div>
-        <div class="PhotoSlider__BannerRight">
-          <download
-            class="PhotoSlider__BannerIcon"
-            @click="handleDownload"
-          />
+        <div v-if="!hideOperate" class="PhotoSlider__BannerRight">
+          <download class="PhotoSlider__BannerIcon" @click="handleDownload" />
           <rotate-left
             class="PhotoSlider__BannerIcon"
             @click="handleRotateLeft"
@@ -44,10 +41,7 @@
             class="PhotoSlider__BannerIcon"
             @click="toggleFlipVertical"
           />
-          <close
-            class="PhotoSlider__BannerIcon"
-            @click="handleClickClose"
-          />
+          <close class="PhotoSlider__BannerIcon" @click="handleClickClose" />
         </div>
       </div>
       <div
@@ -57,7 +51,7 @@
         :style="{
           left: getItemLeft(currentIndex),
           transition: getItemTransition(),
-          transform: getItemTransform()
+          transform: getItemTransform(),
         }"
         @transitionend="resetNeedTransition"
         @click="handleClickMask"
@@ -91,7 +85,7 @@
         </div>
       </template>
       <div
-        v-if="currentItem.intro"
+        v-if="!hideIntro && currentItem.intro"
         class="PhotoSlider__FooterWrap"
       >
         {{ currentItem.intro }}
@@ -100,26 +94,31 @@
   </teleport>
 </template>
 
-<script lang='ts'>
-import { defineComponent, computed, toRefs, PropType } from 'vue';
-import PhotoView from '../PhotoView/index.vue';
-import { horizontalOffset, minSwitchImageOffset } from '../constant';
-import useBodyEffect from './useBodyEffect';
-import useInnerWidth from './useInnerWidth';
-import Close from './Close.vue';
-import ArrowLeft from './ArrowLeft.vue';
-import ArrowRight from './ArrowRight.vue';
-import RotateLeft from './RotateLeft.vue';
-import RotateRight from './RotateRight.vue';
-import FlipHorizontal from './FlipHorizontal.vue';
-import FlipVertical from './FlipVertical.vue';
-import Download from './Download.vue';
-import useAnimationHandle from './useAnimationHandle';
-import { ItemType, ShowAnimateEnum, TouchTypeEnum, EdgeTypeEnum } from '../types';
-import isTouchDevice from '../utils/isTouchDevice';
+<script lang="ts">
+import { defineComponent, computed, toRefs, PropType } from "vue";
+import PhotoView from "../PhotoView/index.vue";
+import { horizontalOffset, minSwitchImageOffset } from "../constant";
+import useBodyEffect from "./useBodyEffect";
+import useInnerWidth from "./useInnerWidth";
+import Close from "./Close.vue";
+import ArrowLeft from "./ArrowLeft.vue";
+import ArrowRight from "./ArrowRight.vue";
+import RotateLeft from "./RotateLeft.vue";
+import RotateRight from "./RotateRight.vue";
+import FlipHorizontal from "./FlipHorizontal.vue";
+import FlipVertical from "./FlipVertical.vue";
+import Download from "./Download.vue";
+import useAnimationHandle from "./useAnimationHandle";
+import {
+  ItemType,
+  ShowAnimateEnum,
+  TouchTypeEnum,
+  EdgeTypeEnum,
+} from "../types";
+import isTouchDevice from "../utils/isTouchDevice";
 
 export default defineComponent({
-  name: 'PhotoSlider',
+  name: "PhotoSlider",
   components: {
     PhotoView,
     Close,
@@ -132,6 +131,21 @@ export default defineComponent({
     Download,
   },
   props: {
+    // 隐藏顶部 计数栏
+    hideCounter: {
+      type: Boolean,
+      required: true,
+    },
+    // 隐藏顶部 右侧操作栏
+    hideOperate: {
+      type: Boolean,
+      required: true,
+    },
+    // 隐藏底部 图片描述信息
+    hideIntro: {
+      type: Boolean,
+      required: true,
+    },
     /**
      * 图片列表
      */
@@ -187,9 +201,9 @@ export default defineComponent({
     downloadMethod: {
       type: Function as PropType<(item: ItemType) => void | null>,
       default: null,
-    }
+    },
   },
-  emits: ['clickPhoto', 'clickMask', 'changeIndex', 'closeModal'],
+  emits: ["clickPhoto", "clickMask", "changeIndex", "closeModal"],
   setup(props) {
     const { items, index, visible } = toRefs(props);
     const currentItem = computed<ItemType>(() => {
@@ -197,9 +211,8 @@ export default defineComponent({
     });
 
     useBodyEffect(visible);
-    const {
-      photoVisible, showAnimateType, originRect, onShowAnimateEnd
-    } = useAnimationHandle(visible, currentItem);
+    const { photoVisible, showAnimateType, originRect, onShowAnimateEnd } =
+      useAnimationHandle(visible, currentItem);
     const { innerWidth } = useInnerWidth();
 
     return {
@@ -241,48 +254,51 @@ export default defineComponent({
         const connect = this.items.concat(this.items).concat(this.items);
         return connect.slice(len + this.index - 1, len + this.index + 2);
       }
-      return this.items.slice(Math.max(this.index - 1, 0), Math.min(this.index + 2, len));
-    }
+      return this.items.slice(
+        Math.max(this.index - 1, 0),
+        Math.min(this.index + 2, len)
+      );
+    },
   },
   created() {
-    window.addEventListener('keydown', this.handleKeyDown);
+    window.addEventListener("keydown", this.handleKeyDown);
   },
   beforeUnmount() {
-    window.removeEventListener('keydown', this.handleKeyDown);
+    window.removeEventListener("keydown", this.handleKeyDown);
   },
   beforeUpdate() {
     this.photoViewRefs = {};
   },
   methods: {
     defaultDownloadMethod(item: ItemType) {
-      const paths = item.src.split('/');
+      const paths = item.src.split("/");
       const name = paths[paths.length - 1];
 
       const img = new Image();
-      img.setAttribute('crossOrigin', 'Anonymous');
+      img.setAttribute("crossOrigin", "Anonymous");
       img.onload = () => {
-        const canvas = document.createElement('canvas');
-        const context = canvas.getContext('2d');
+        const canvas = document.createElement("canvas");
+        const context = canvas.getContext("2d");
         canvas.width = img.width;
         canvas.height = img.height;
         context?.drawImage(img, 0, 0, img.width, img.height);
-        canvas.toBlob(blob => {
+        canvas.toBlob((blob) => {
           if (blob) {
             const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
+            const a = document.createElement("a");
             a.download = item.downloadName || name;
             a.href = url;
-            a.dispatchEvent(new MouseEvent('click'));
+            a.dispatchEvent(new MouseEvent("click"));
             // 释放 createObjectURL 创建的内存对象（否则以 blob:http 开头的 url 可以到浏览器访问，多次创建内存会不断增大）
             URL.revokeObjectURL(url);
           }
         });
       };
-      img.src = item.src + '?v=' + Date.now();
+      img.src = item.src + "?v=" + Date.now();
     },
     handleDownload() {
       const item = this.items[this.index];
-      if (typeof this.downloadMethod === 'function') {
+      if (typeof this.downloadMethod === "function") {
         this.downloadMethod(item);
       } else {
         this.defaultDownloadMethod(item);
@@ -307,23 +323,27 @@ export default defineComponent({
     handleKeyDown(e: KeyboardEvent) {
       if (this.visible) {
         switch (e.code) {
-          case 'ArrowLeft':
+          case "ArrowLeft":
             this.handlePrevious();
             break;
-          case 'ArrowRight':
+          case "ArrowRight":
             this.handleNext();
             break;
-          case 'Escape':
+          case "Escape":
             this.handleClickClose();
             break;
         }
       }
     },
-    handleSingleTap(_clientX: number, _clientY: number, e: MouseEvent | TouchEvent) {
+    handleSingleTap(
+      _clientX: number,
+      _clientY: number,
+      e: MouseEvent | TouchEvent
+    ) {
       if (this.toggleOverlay) {
         this.overlayVisible = !this.overlayVisible;
       }
-      this.$emit('clickPhoto', e);
+      this.$emit("clickPhoto", e);
     },
     handleTouchStart(clientX: number, clientY: number) {
       this.touched = true;
@@ -331,7 +351,13 @@ export default defineComponent({
       this.clientX = clientX;
       this.clientY = clientY;
     },
-    handleTouchMove(touchType: TouchTypeEnum, clientX: number, clientY: number, lastScale: number, edgeTypes: EdgeTypeEnum[]) {
+    handleTouchMove(
+      touchType: TouchTypeEnum,
+      clientX: number,
+      clientY: number,
+      lastScale: number,
+      edgeTypes: EdgeTypeEnum[]
+    ) {
       if (touchType === TouchTypeEnum.Scale && lastScale !== 1) {
         this.handleTouchScaleMove(clientX, edgeTypes);
       }
@@ -357,7 +383,8 @@ export default defineComponent({
       // 非循环模式下，第一张和最后一张超出时拖拽距离减半
       if (
         !this.loop &&
-        ((this.index === 0 && touchMoveX > 0) || (this.index === this.items.length - 1 && touchMoveX < 0))
+        ((this.index === 0 && touchMoveX > 0) ||
+          (this.index === this.items.length - 1 && touchMoveX < 0))
       ) {
         touchMoveX = touchMoveX / 2;
       }
@@ -368,14 +395,23 @@ export default defineComponent({
     handleTouchVerticalMove(clientX: number, clientY: number) {
       let touchMoveY = Math.abs(clientY - this.clientY);
       const opacity = Math.max(
-        Math.min(this.defaultBackdropOpacity, this.defaultBackdropOpacity - touchMoveY / 100 / 4),
+        Math.min(
+          this.defaultBackdropOpacity,
+          this.defaultBackdropOpacity - touchMoveY / 100 / 4
+        ),
         0
       );
 
       this.hasMove = clientX !== this.clientX || clientY !== this.clientY;
       this.backdropOpacity = opacity;
     },
-    handleTouchEnd(touchType: TouchTypeEnum, clientX: number, clientY: number, lastScale: number, edgeTypes: EdgeTypeEnum[]) {
+    handleTouchEnd(
+      touchType: TouchTypeEnum,
+      clientX: number,
+      clientY: number,
+      lastScale: number,
+      edgeTypes: EdgeTypeEnum[]
+    ) {
       if (touchType === TouchTypeEnum.Scale && lastScale !== 1) {
         this.handleTouchScaleEnd(clientX, edgeTypes);
       }
@@ -398,11 +434,17 @@ export default defineComponent({
     handleTouchScaleEnd(clientX: number, edgeTypes: EdgeTypeEnum[]) {
       const offsetX = clientX - this.clientX;
       // 下一张
-      if (offsetX < -minSwitchImageOffset && edgeTypes.includes(EdgeTypeEnum.Right)) {
+      if (
+        offsetX < -minSwitchImageOffset &&
+        edgeTypes.includes(EdgeTypeEnum.Right)
+      ) {
         this.handleNext();
       }
       // 上一张
-      if (offsetX > minSwitchImageOffset && edgeTypes.includes(EdgeTypeEnum.Left)) {
+      if (
+        offsetX > minSwitchImageOffset &&
+        edgeTypes.includes(EdgeTypeEnum.Left)
+      ) {
         this.handlePrevious();
       }
     },
@@ -421,7 +463,7 @@ export default defineComponent({
       const offsetY = clientY - this.clientY;
 
       if (Math.abs(offsetY) > window.innerHeight * 0.14) {
-        this.$emit('closeModal');
+        this.$emit("closeModal");
       } else {
         this.resetBackdropOpacity();
       }
@@ -435,20 +477,20 @@ export default defineComponent({
     handlePrevious() {
       const len = this.items.length;
       if (!this.loop && this.index === 0) return;
-      this.$emit('changeIndex', (this.index + len - 1) % len);
+      this.$emit("changeIndex", (this.index + len - 1) % len);
       this.virtualIndex -= 1;
     },
     handleNext() {
       const len = this.items.length;
       if (!this.loop && this.index === len - 1) return;
-      this.$emit('changeIndex', (this.index + 1) % len);
+      this.$emit("changeIndex", (this.index + 1) % len);
       this.virtualIndex += 1;
     },
     handleClickMask(e: MouseEvent | TouchEvent) {
-      this.$emit('clickMask', e);
+      this.$emit("clickMask", e);
     },
     handleClickClose() {
-      this.$emit('closeModal');
+      this.$emit("closeModal");
     },
     // 对于中间的图片，当预览下一张时，getItemTransform 方法会做动画左移一个单位。showItems 列表会发生变化使 currentIndex 会从 1 变成 0，也相当于左移一个单位
     // 所以此时需要根据 virtualIndex 右移一个单位的来平衡其中一个左移即可
@@ -461,7 +503,7 @@ export default defineComponent({
       return `${(this.innerWidth + this.horizontalOffset) * index}px`;
     },
     getItemTransition() {
-      const transition = 'transform 0.6s cubic-bezier(0.25, 0.8, 0.25, 1)';
+      const transition = "transform 0.6s cubic-bezier(0.25, 0.8, 0.25, 1)";
       if (this.needTransition) {
         return transition;
       }
@@ -471,9 +513,12 @@ export default defineComponent({
       return this.shouldTransition ? transition : undefined;
     },
     getItemTransform() {
-      return `translate3d(${-(this.innerWidth + this.horizontalOffset) * this.virtualIndex + this.touchMoveX}px, 0px, 0px)`;
-    }
-  }
+      return `translate3d(${
+        -(this.innerWidth + this.horizontalOffset) * this.virtualIndex +
+        this.touchMoveX
+      }px, 0px, 0px)`;
+    },
+  },
 });
 </script>
 
@@ -482,6 +527,7 @@ export default defineComponent({
   from {
     opacity: 0;
   }
+
   to {
     opacity: 1;
   }
@@ -493,7 +539,8 @@ export default defineComponent({
   .PhotoSlider__ArrowRight,
   .PhotoSlider__FooterWrap {
     opacity: 0;
-    @media (any-hover: hover){
+
+    @media (any-hover: hover) {
       &:hover {
         opacity: 0;
       }
@@ -532,6 +579,7 @@ export default defineComponent({
       opacity: 0;
       animation: PhotoView__fade 0.4s linear both;
     }
+
     &.PhotoSlider__fadeOut {
       opacity: 1;
       animation: PhotoView__fade 0.4s linear both reverse;
@@ -552,7 +600,7 @@ export default defineComponent({
     transition: opacity 0.2s ease-out;
     z-index: 20;
 
-    @media (any-hover: hover){
+    @media (any-hover: hover) {
       &:hover {
         opacity: 1;
       }
@@ -578,7 +626,7 @@ export default defineComponent({
         cursor: pointer;
         transition: all 0.2s linear;
 
-        @media (any-hover: hover){
+        @media (any-hover: hover) {
           &:hover {
             opacity: 1;
           }
@@ -624,7 +672,7 @@ export default defineComponent({
     justify-content: center;
     align-items: center;
 
-    @media (any-hover: hover){
+    @media (any-hover: hover) {
       &:hover {
         opacity: 1;
       }
@@ -656,7 +704,7 @@ export default defineComponent({
     transition: opacity 0.2s ease-out;
     z-index: 20;
 
-    @media (any-hover: hover){
+    @media (any-hover: hover) {
       &:hover {
         opacity: 1;
       }

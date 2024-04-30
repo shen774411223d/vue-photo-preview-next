@@ -10,6 +10,9 @@
     :items="items"
     :loop="loop"
     :download-method="downloadMethod"
+    :hide-counter="hideCounter"
+    :hide-intro="hideIntro"
+    :hide-operate="hideOperate"
     @clickPhoto="handleClickPhoto"
     @clickMask="handleClickMask"
     @changeIndex="updateIndex"
@@ -17,21 +20,39 @@
   />
 </template>
 
-<script lang='ts'>
-import { defineComponent, PropType, provide } from 'vue';
-import { updateItemKey, removeItemKey, handleShowKey } from '../symbols';
-import useItems from './useItems';
-import useVisible from './useVisible';
-import useIndex from './useIndex';
-import PhotoSlider from '../PhotoSlider/index.vue';
-import { ItemType } from '../types';
+<script lang="ts">
+import { defineComponent, PropType, provide } from "vue";
+import { updateItemKey, removeItemKey, handleShowKey } from "../symbols";
+import useItems from "./useItems";
+import useVisible from "./useVisible";
+import useIndex from "./useIndex";
+import PhotoSlider from "../PhotoSlider/index.vue";
+import { ItemType } from "../types";
 
 export default defineComponent({
-  name: 'PhotoProvider',
+  name: "PhotoProvider",
   components: {
-    PhotoSlider
+    PhotoSlider,
   },
   props: {
+    // 隐藏顶部 计数栏
+    hideCounter: {
+      type: Boolean,
+      required: false,
+      default: false,
+    },
+    // 隐藏顶部 右侧操作栏
+    hideOperate: {
+      type: Boolean,
+      required: false,
+      default: false,
+    },
+    // 隐藏底部 图片描述信息
+    hideIntro: {
+      type: Boolean,
+      required: false,
+      default: false,
+    },
     /**
      * 图片点击是否关闭
      */
@@ -73,19 +94,23 @@ export default defineComponent({
     downloadMethod: {
       type: Function as PropType<(item: ItemType) => void | null>,
       default: null,
-    }
+    },
   },
-  emits: ['indexChange', 'visibleChange'],
+  emits: ["indexChange", "visibleChange"],
   setup(_props, { emit }) {
     const onIndexChange = () => {
-      emit('indexChange', { index, items, visible });
+      emit("indexChange", { index, items, visible });
     };
     const onVisibleChange = () => {
-      emit('visibleChange', { index, items, visible });
+      emit("visibleChange", { index, items, visible });
     };
     const { index, updateIndex } = useIndex(onIndexChange);
     const { items, updateItem, removeItem } = useItems(index);
-    const { visible, handleHide, handleShow } = useVisible(items, index, onVisibleChange);
+    const { visible, handleHide, handleShow } = useVisible(
+      items,
+      index,
+      onVisibleChange
+    );
 
     provide(updateItemKey, updateItem);
     provide(removeItemKey, removeItem);
@@ -112,10 +137,9 @@ export default defineComponent({
       if (this.maskClosable) {
         this.handleHide();
       }
-    }
-  }
+    },
+  },
 });
 </script>
 
-<style lang="scss">
-</style>
+<style lang="scss"></style>
