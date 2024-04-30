@@ -1,6 +1,6 @@
 {
   "name": "vue-photo-preview-next",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "base vue3 preview images. pc mobule supported",
   "main": "dist/vue3-photo-preview.umd.js",
   "module": "dist/vue3-photo-preview.esm.js",
