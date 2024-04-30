@@ -1,5 +1,5 @@
 {
-  "name": "vue3-photo-preview",
+  "name": "vue-photo-preview-next",
   "version": "0.0.1",
   "description": "一个 vue3 的图片预览组件",
   "main": "dist/vue3-photo-preview.umd.js",
@@ -14,7 +14,7 @@
   "keywords": [
     "vue3",
     "photo-preview",
-    "vue3-photo-preview"
+    "vue-photo-preview-next"
   ],
   "engines": {
     "node": ">=14",
