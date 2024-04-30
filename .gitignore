@@ -2,6 +2,9 @@
 node_modules
 dist
 
+# npmrc
+.npmrc
+
 # Log files
 npm-debug.log*
 yarn-debug.log*
