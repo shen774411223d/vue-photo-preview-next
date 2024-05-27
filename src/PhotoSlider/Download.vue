@@ -1,12 +1,5 @@
 <template>
-  <svg
-    viewBox="0 0 1068 1024"
-    version="1.1"
-    xmlns="http://www.w3.org/2000/svg"
-    p-id="2740"
-    width="44"
-    height="44"
-  >
+  <svg viewBox="0 0 1068 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2740" width="44" height="44">
     <path
       d="M252.622237 809.004596a252.614304 252.614304 0 0 1-31.486765-503.2587v-4.352863a301.406611 301.406611 0 0 1 594.880633-68.660847 288.877568 288.877568 0 0 1-36.146765 575.488683 31.529129 31.529129 0 0 1 0-63.047667 225.819311 225.819311 0 0 0 8.472726-451.479758l-26.244267-0.974363-3.812726-25.990085a238.358944 238.358944 0 0 0-474.176071 34.664037 243.040125 243.040125 0 0 0 1.874591 30.035812l4.501135 35.786673-37.163491-0.3495h-0.730773c-104.521657 0-189.577228 85.034389-189.577228 189.577228s85.034389 189.577228 189.577228 189.577228a31.529129 31.529129 0 0 1 0 63.047667z"
       fill="#FFF"
@@ -26,12 +19,10 @@
   </svg>
 </template>
 
-<script lang='ts'>
-import { defineComponent } from 'vue';
+<script lang="ts">
+import { defineComponent } from 'vue'
 
-export default defineComponent({
-});
+export default defineComponent({})
 </script>
 
-<style lang="scss">
-</style>
+<style lang="scss"></style>

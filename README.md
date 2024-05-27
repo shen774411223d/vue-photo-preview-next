@@ -15,9 +15,10 @@ type hideIntro = boolean;
 
 #### TODO:
 
-1. `hideOperate`和`hideCounter`参数没有和`imgItem`的参数结合，应向底部图片信息一样 做到每一张图片都能控制展示隐藏
-2. 本地`demo`运行报错，应切换到`vite+vue3`
-3. `scss => less`
+- [ ] `hideOperate`和`hideCounter`参数没有和`imgItem`的参数结合，应向底部图片信息一样 做到每一张图片都能控制展示隐藏
+- [x] 本地`demo`运行报错，应切换到`vite+vue3`
+- [ ] `scss => less`
+- [x] 添加vite开发服务，`/site`文件夹启动后 可以在`/site/App.vue`中使用插件 快速调试
 
 ### 特点
 
@@ -40,8 +41,8 @@ npm install -S vue3-photo-preview
 ### 全局注册
 
 ```js
-import vue3PhotoPreview from "vue3-photo-preview";
-import "vue3-photo-preview/dist/index.css";
+import vue3PhotoPreview from 'vue3-photo-preview';
+import 'vue3-photo-preview/dist/index.css';
 
 app.use(vue3PhotoPreview);
 ```

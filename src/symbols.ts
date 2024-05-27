@@ -1,8 +1,8 @@
-import { UpdateItemType, RemoveItemType, HandleShowType } from './types';
-import { InjectionKey } from 'vue';
+import { UpdateItemType, RemoveItemType, HandleShowType } from './types'
+import { InjectionKey } from 'vue'
 
-export const updateItemKey: InjectionKey<UpdateItemType> = Symbol();
+export const updateItemKey: InjectionKey<UpdateItemType> = Symbol()
 
-export const removeItemKey: InjectionKey<RemoveItemType> = Symbol();
+export const removeItemKey: InjectionKey<RemoveItemType> = Symbol()
 
-export const handleShowKey: InjectionKey<HandleShowType> = Symbol();
+export const handleShowKey: InjectionKey<HandleShowType> = Symbol()

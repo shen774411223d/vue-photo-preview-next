@@ -6,7 +6,7 @@
   "module": "dist/vue-photo-preview-next.esm.js",
   "esnext": "dist/vue-photo-preview.esm-next.js",
   "types": "dist/types/index.d.ts",
-  "author": "wangjp",
+  "author": "sxt",
   "license": "MIT",
   "repository": "https://github.com/shen774411223d/vue-photo-preview-next",
   "homepage": "https://github.com/shen774411223d/vue-photo-preview-next#readme",
@@ -14,8 +14,8 @@
   "keywords": [
     "vue3",
     "img-preview",
-		"phtot-preview",
-		"h5",
+    "phtot-preview",
+    "h5",
     "vue-photo-preview-next"
   ],
   "engines": {
@@ -24,19 +24,11 @@
   },
   "scripts": {
     "build": "npm run clean && tsc --module commonjs && rollup -c rollup.config.ts",
+    "dev:preview": "cd site && vite",
     "dev": "rollup -c rollup.config.ts -w",
     "clean": "rimraf ./dist",
     "deploy": "deploy.sh",
     "release": "npm run build && release.sh"
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "lint-staged",
-      "commit-msg": "FORCE_COLOR=1 node scripts/verify-commit.js"
-    }
-  },
-  "lint-staged": {
-    "src/**/*.{js,jsx,ts,tsx,vue}": "eslint"
   },
   "peerDependencies": {
     "vue": ">=3.2.0"
@@ -48,6 +40,8 @@
     "@types/lodash-es": "^4.17.4",
     "@typescript-eslint/eslint-plugin": "^4.29.2",
     "@typescript-eslint/parser": "^4.29.2",
+    "@vitejs/plugin-vue": "^5.0.4",
+    "@vitejs/plugin-vue-jsx": "^3.1.0",
     "@vue/compiler-sfc": "^3.2.4",
     "autoprefixer": "^10.3.1",
     "chalk": "^4.1.2",
@@ -56,6 +50,7 @@
     "husky": "4.2.3",
     "lint-staged": "^11.1.2",
     "postcss": "^8.3.6",
+    "prettier": "^3.2.5",
     "rimraf": "^3.0.2",
     "rollup": "^2.56.2",
     "rollup-plugin-peer-deps-external": "^2.2.4",
@@ -64,7 +59,9 @@
     "rollup-plugin-vue": "^6.0.0-beta.10",
     "sass": "^1.38.0",
     "tslib": "^2.1.0",
-    "typescript": "^4.3.5"
+    "typescript": "^4.3.5",
+    "vite": "^5.2.11",
+    "vue": "^3.4.27"
   },
   "dependencies": {
     "lodash-es": "^4.17.21"

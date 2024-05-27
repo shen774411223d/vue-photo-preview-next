@@ -25,22 +25,10 @@
         </div>
         <div v-if="!hideOperate" class="PhotoSlider__BannerRight">
           <download class="PhotoSlider__BannerIcon" @click="handleDownload" />
-          <rotate-left
-            class="PhotoSlider__BannerIcon"
-            @click="handleRotateLeft"
-          />
-          <rotate-right
-            class="PhotoSlider__BannerIcon"
-            @click="handleRotateRight"
-          />
-          <flip-horizontal
-            class="PhotoSlider__BannerIcon"
-            @click="toggleFlipHorizontal"
-          />
-          <flip-vertical
-            class="PhotoSlider__BannerIcon"
-            @click="toggleFlipVertical"
-          />
+          <rotate-left class="PhotoSlider__BannerIcon" @click="handleRotateLeft" />
+          <rotate-right class="PhotoSlider__BannerIcon" @click="handleRotateRight" />
+          <flip-horizontal class="PhotoSlider__BannerIcon" @click="toggleFlipHorizontal" />
+          <flip-vertical class="PhotoSlider__BannerIcon" @click="toggleFlipVertical" />
           <close class="PhotoSlider__BannerIcon" @click="handleClickClose" />
         </div>
       </div>
@@ -69,25 +57,14 @@
         />
       </div>
       <template v-if="!isTouchDevice">
-        <div
-          v-if="loop || index > 0"
-          class="PhotoSlider__ArrowLeft"
-          @click="handlePrevious"
-        >
+        <div v-if="loop || index > 0" class="PhotoSlider__ArrowLeft" @click="handlePrevious">
           <arrow-left />
         </div>
-        <div
-          v-if="loop || index < items.length - 1"
-          class="PhotoSlider__ArrowRight"
-          @click="handleNext"
-        >
+        <div v-if="loop || index < items.length - 1" class="PhotoSlider__ArrowRight" @click="handleNext">
           <arrow-right />
         </div>
       </template>
-      <div
-        v-if="!hideIntro && currentItem.intro"
-        class="PhotoSlider__FooterWrap"
-      >
+      <div v-if="!hideIntro && currentItem.intro" class="PhotoSlider__FooterWrap">
         {{ currentItem.intro }}
       </div>
     </div>
@@ -95,30 +72,25 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, computed, toRefs, PropType } from "vue";
-import PhotoView from "../PhotoView/index.vue";
-import { horizontalOffset, minSwitchImageOffset } from "../constant";
-import useBodyEffect from "./useBodyEffect";
-import useInnerWidth from "./useInnerWidth";
-import Close from "./Close.vue";
-import ArrowLeft from "./ArrowLeft.vue";
-import ArrowRight from "./ArrowRight.vue";
-import RotateLeft from "./RotateLeft.vue";
-import RotateRight from "./RotateRight.vue";
-import FlipHorizontal from "./FlipHorizontal.vue";
-import FlipVertical from "./FlipVertical.vue";
-import Download from "./Download.vue";
-import useAnimationHandle from "./useAnimationHandle";
-import {
-  ItemType,
-  ShowAnimateEnum,
-  TouchTypeEnum,
-  EdgeTypeEnum,
-} from "../types";
-import isTouchDevice from "../utils/isTouchDevice";
+import { defineComponent, computed, toRefs, PropType } from 'vue'
+import PhotoView from '../PhotoView/index.vue'
+import { horizontalOffset, minSwitchImageOffset } from '../constant'
+import useBodyEffect from './useBodyEffect'
+import useInnerWidth from './useInnerWidth'
+import Close from './Close.vue'
+import ArrowLeft from './ArrowLeft.vue'
+import ArrowRight from './ArrowRight.vue'
+import RotateLeft from './RotateLeft.vue'
+import RotateRight from './RotateRight.vue'
+import FlipHorizontal from './FlipHorizontal.vue'
+import FlipVertical from './FlipVertical.vue'
+import Download from './Download.vue'
+import useAnimationHandle from './useAnimationHandle'
+import { ItemType, ShowAnimateEnum, TouchTypeEnum, EdgeTypeEnum } from '../types'
+import isTouchDevice from '../utils/isTouchDevice'
 
 export default defineComponent({
-  name: "PhotoSlider",
+  name: 'PhotoSlider',
   components: {
     PhotoView,
     Close,
@@ -203,17 +175,16 @@ export default defineComponent({
       default: null,
     },
   },
-  emits: ["clickPhoto", "clickMask", "changeIndex", "closeModal"],
+  emits: ['clickPhoto', 'clickMask', 'changeIndex', 'closeModal'],
   setup(props) {
-    const { items, index, visible } = toRefs(props);
+    const { items, index, visible } = toRefs(props)
     const currentItem = computed<ItemType>(() => {
-      return items.value[index.value] || {};
-    });
+      return items.value[index.value] || {}
+    })
 
-    useBodyEffect(visible);
-    const { photoVisible, showAnimateType, originRect, onShowAnimateEnd } =
-      useAnimationHandle(visible, currentItem);
-    const { innerWidth } = useInnerWidth();
+    useBodyEffect(visible)
+    const { photoVisible, showAnimateType, originRect, onShowAnimateEnd } = useAnimationHandle(visible, currentItem)
+    const { innerWidth } = useInnerWidth()
 
     return {
       innerWidth,
@@ -222,7 +193,7 @@ export default defineComponent({
       showAnimateType,
       originRect,
       onShowAnimateEnd,
-    };
+    }
   },
   data() {
     return {
@@ -244,282 +215,264 @@ export default defineComponent({
       virtualIndex: 0,
       // photo-view 子组件
       photoViewRefs: {} as { [key: string]: InstanceType<typeof PhotoView> },
-    };
+    }
   },
   computed: {
     // 当前显示的图片列表
     showItems() {
-      const len = this.items.length;
+      const len = this.items.length
       if (this.loop) {
-        const connect = this.items.concat(this.items).concat(this.items);
-        return connect.slice(len + this.index - 1, len + this.index + 2);
+        const connect = this.items.concat(this.items).concat(this.items)
+        return connect.slice(len + this.index - 1, len + this.index + 2)
       }
-      return this.items.slice(
-        Math.max(this.index - 1, 0),
-        Math.min(this.index + 2, len)
-      );
+      return this.items.slice(Math.max(this.index - 1, 0), Math.min(this.index + 2, len))
     },
   },
   created() {
-    window.addEventListener("keydown", this.handleKeyDown);
+    window.addEventListener('keydown', this.handleKeyDown)
   },
   beforeUnmount() {
-    window.removeEventListener("keydown", this.handleKeyDown);
+    window.removeEventListener('keydown', this.handleKeyDown)
   },
   beforeUpdate() {
-    this.photoViewRefs = {};
+    this.photoViewRefs = {}
   },
   methods: {
     defaultDownloadMethod(item: ItemType) {
-      const paths = item.src.split("/");
-      const name = paths[paths.length - 1];
+      const paths = item.src.split('/')
+      const name = paths[paths.length - 1]
 
-      const img = new Image();
-      img.setAttribute("crossOrigin", "Anonymous");
+      const img = new Image()
+      img.setAttribute('crossOrigin', 'Anonymous')
       img.onload = () => {
-        const canvas = document.createElement("canvas");
-        const context = canvas.getContext("2d");
-        canvas.width = img.width;
-        canvas.height = img.height;
-        context?.drawImage(img, 0, 0, img.width, img.height);
+        const canvas = document.createElement('canvas')
+        const context = canvas.getContext('2d')
+        canvas.width = img.width
+        canvas.height = img.height
+        context?.drawImage(img, 0, 0, img.width, img.height)
         canvas.toBlob((blob) => {
           if (blob) {
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement("a");
-            a.download = item.downloadName || name;
-            a.href = url;
-            a.dispatchEvent(new MouseEvent("click"));
+            const url = URL.createObjectURL(blob)
+            const a = document.createElement('a')
+            a.download = item.downloadName || name
+            a.href = url
+            a.dispatchEvent(new MouseEvent('click'))
             // 释放 createObjectURL 创建的内存对象（否则以 blob:http 开头的 url 可以到浏览器访问，多次创建内存会不断增大）
-            URL.revokeObjectURL(url);
+            URL.revokeObjectURL(url)
           }
-        });
-      };
-      img.src = item.src + "?v=" + Date.now();
+        })
+      }
+      img.src = item.src + '?v=' + Date.now()
     },
     handleDownload() {
-      const item = this.items[this.index];
-      if (typeof this.downloadMethod === "function") {
-        this.downloadMethod(item);
+      const item = this.items[this.index]
+      if (typeof this.downloadMethod === 'function') {
+        this.downloadMethod(item)
       } else {
-        this.defaultDownloadMethod(item);
+        this.defaultDownloadMethod(item)
       }
     },
     toggleFlipHorizontal() {
-      this.photoViewRefs[this.currentItem.key].toggleFlipHorizontal();
+      this.photoViewRefs[this.currentItem.key].toggleFlipHorizontal()
     },
     toggleFlipVertical() {
-      this.photoViewRefs[this.currentItem.key].toggleFlipVertical();
+      this.photoViewRefs[this.currentItem.key].toggleFlipVertical()
     },
     handleRotateLeft() {
-      this.photoViewRefs[this.currentItem.key].handleRotateLeft();
+      this.photoViewRefs[this.currentItem.key].handleRotateLeft()
     },
     handleRotateRight() {
-      this.photoViewRefs[this.currentItem.key].handleRotateRight();
+      this.photoViewRefs[this.currentItem.key].handleRotateRight()
     },
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     setPhotoViewRef(key: string, ref: any) {
-      this.photoViewRefs[key] = ref as InstanceType<typeof PhotoView>;
+      this.photoViewRefs[key] = ref as InstanceType<typeof PhotoView>
     },
     handleKeyDown(e: KeyboardEvent) {
       if (this.visible) {
         switch (e.code) {
-          case "ArrowLeft":
-            this.handlePrevious();
-            break;
-          case "ArrowRight":
-            this.handleNext();
-            break;
-          case "Escape":
-            this.handleClickClose();
-            break;
+          case 'ArrowLeft':
+            this.handlePrevious()
+            break
+          case 'ArrowRight':
+            this.handleNext()
+            break
+          case 'Escape':
+            this.handleClickClose()
+            break
         }
       }
     },
-    handleSingleTap(
-      _clientX: number,
-      _clientY: number,
-      e: MouseEvent | TouchEvent
-    ) {
+    handleSingleTap(_clientX: number, _clientY: number, e: MouseEvent | TouchEvent) {
       if (this.toggleOverlay) {
-        this.overlayVisible = !this.overlayVisible;
+        this.overlayVisible = !this.overlayVisible
       }
-      this.$emit("clickPhoto", e);
+      this.$emit('clickPhoto', e)
     },
     handleTouchStart(clientX: number, clientY: number) {
-      this.touched = true;
-      this.needTransition = false;
-      this.clientX = clientX;
-      this.clientY = clientY;
+      this.touched = true
+      this.needTransition = false
+      this.clientX = clientX
+      this.clientY = clientY
     },
     handleTouchMove(
       touchType: TouchTypeEnum,
       clientX: number,
       clientY: number,
       lastScale: number,
-      edgeTypes: EdgeTypeEnum[]
+      edgeTypes: EdgeTypeEnum[],
     ) {
       if (touchType === TouchTypeEnum.Scale && lastScale !== 1) {
-        this.handleTouchScaleMove(clientX, edgeTypes);
+        this.handleTouchScaleMove(clientX, edgeTypes)
       }
       if (touchType === TouchTypeEnum.X) {
-        this.handleTouchHorizontalMove(clientX);
+        this.handleTouchHorizontalMove(clientX)
       }
       if (touchType === TouchTypeEnum.Y) {
-        this.handleTouchVerticalMove(clientX, clientY);
+        this.handleTouchVerticalMove(clientX, clientY)
       }
     },
     handleTouchScaleMove(clientX: number, edgeTypes: EdgeTypeEnum[]) {
-      let touchMoveX = clientX - this.clientX;
+      let touchMoveX = clientX - this.clientX
       if (
         (touchMoveX > 0 && edgeTypes.includes(EdgeTypeEnum.Left)) ||
         (touchMoveX < 0 && edgeTypes.includes(EdgeTypeEnum.Right))
       ) {
-        this.handleTouchHorizontalMove(clientX);
+        this.handleTouchHorizontalMove(clientX)
       }
     },
     handleTouchHorizontalMove(clientX: number) {
-      let touchMoveX = clientX - this.clientX;
+      let touchMoveX = clientX - this.clientX
 
       // 非循环模式下，第一张和最后一张超出时拖拽距离减半
       if (
         !this.loop &&
-        ((this.index === 0 && touchMoveX > 0) ||
-          (this.index === this.items.length - 1 && touchMoveX < 0))
+        ((this.index === 0 && touchMoveX > 0) || (this.index === this.items.length - 1 && touchMoveX < 0))
       ) {
-        touchMoveX = touchMoveX / 2;
+        touchMoveX = touchMoveX / 2
       }
 
-      this.hasMove = clientX !== this.clientX;
-      this.touchMoveX = touchMoveX;
+      this.hasMove = clientX !== this.clientX
+      this.touchMoveX = touchMoveX
     },
     handleTouchVerticalMove(clientX: number, clientY: number) {
-      let touchMoveY = Math.abs(clientY - this.clientY);
+      let touchMoveY = Math.abs(clientY - this.clientY)
       const opacity = Math.max(
-        Math.min(
-          this.defaultBackdropOpacity,
-          this.defaultBackdropOpacity - touchMoveY / 100 / 4
-        ),
-        0
-      );
+        Math.min(this.defaultBackdropOpacity, this.defaultBackdropOpacity - touchMoveY / 100 / 4),
+        0,
+      )
 
-      this.hasMove = clientX !== this.clientX || clientY !== this.clientY;
-      this.backdropOpacity = opacity;
+      this.hasMove = clientX !== this.clientX || clientY !== this.clientY
+      this.backdropOpacity = opacity
     },
     handleTouchEnd(
       touchType: TouchTypeEnum,
       clientX: number,
       clientY: number,
       lastScale: number,
-      edgeTypes: EdgeTypeEnum[]
+      edgeTypes: EdgeTypeEnum[],
     ) {
       if (touchType === TouchTypeEnum.Scale && lastScale !== 1) {
-        this.handleTouchScaleEnd(clientX, edgeTypes);
+        this.handleTouchScaleEnd(clientX, edgeTypes)
       }
       if (touchType === TouchTypeEnum.X) {
-        this.handleTouchHorizontalEnd(clientX);
+        this.handleTouchHorizontalEnd(clientX)
       }
       if (touchType === TouchTypeEnum.Y) {
-        this.handleTouchVerticalEnd(clientY);
+        this.handleTouchVerticalEnd(clientY)
       }
       // 只要移动过，则需要动画过渡
       if (this.hasMove) {
-        this.needTransition = true;
+        this.needTransition = true
       }
-      this.touched = false;
-      this.hasMove = false;
-      this.clientX = 0;
-      this.clientY = 0;
-      this.touchMoveX = 0;
+      this.touched = false
+      this.hasMove = false
+      this.clientX = 0
+      this.clientY = 0
+      this.touchMoveX = 0
     },
     handleTouchScaleEnd(clientX: number, edgeTypes: EdgeTypeEnum[]) {
-      const offsetX = clientX - this.clientX;
+      const offsetX = clientX - this.clientX
       // 下一张
-      if (
-        offsetX < -minSwitchImageOffset &&
-        edgeTypes.includes(EdgeTypeEnum.Right)
-      ) {
-        this.handleNext();
+      if (offsetX < -minSwitchImageOffset && edgeTypes.includes(EdgeTypeEnum.Right)) {
+        this.handleNext()
       }
       // 上一张
-      if (
-        offsetX > minSwitchImageOffset &&
-        edgeTypes.includes(EdgeTypeEnum.Left)
-      ) {
-        this.handlePrevious();
+      if (offsetX > minSwitchImageOffset && edgeTypes.includes(EdgeTypeEnum.Left)) {
+        this.handlePrevious()
       }
     },
     handleTouchHorizontalEnd(clientX: number) {
-      const offsetX = clientX - this.clientX;
+      const offsetX = clientX - this.clientX
       // 下一张
       if (offsetX < -minSwitchImageOffset) {
-        this.handleNext();
+        this.handleNext()
       }
       // 上一张
       if (offsetX > minSwitchImageOffset) {
-        this.handlePrevious();
+        this.handlePrevious()
       }
     },
     handleTouchVerticalEnd(clientY: number) {
-      const offsetY = clientY - this.clientY;
+      const offsetY = clientY - this.clientY
 
       if (Math.abs(offsetY) > window.innerHeight * 0.14) {
-        this.$emit("closeModal");
+        this.$emit('closeModal')
       } else {
-        this.resetBackdropOpacity();
+        this.resetBackdropOpacity()
       }
     },
     resetBackdropOpacity() {
-      this.backdropOpacity = this.defaultBackdropOpacity;
+      this.backdropOpacity = this.defaultBackdropOpacity
     },
     resetNeedTransition() {
-      this.needTransition = false;
+      this.needTransition = false
     },
     handlePrevious() {
-      const len = this.items.length;
-      if (!this.loop && this.index === 0) return;
-      this.$emit("changeIndex", (this.index + len - 1) % len);
-      this.virtualIndex -= 1;
+      const len = this.items.length
+      if (!this.loop && this.index === 0) return
+      this.$emit('changeIndex', (this.index + len - 1) % len)
+      this.virtualIndex -= 1
     },
     handleNext() {
-      const len = this.items.length;
-      if (!this.loop && this.index === len - 1) return;
-      this.$emit("changeIndex", (this.index + 1) % len);
-      this.virtualIndex += 1;
+      const len = this.items.length
+      if (!this.loop && this.index === len - 1) return
+      this.$emit('changeIndex', (this.index + 1) % len)
+      this.virtualIndex += 1
     },
     handleClickMask(e: MouseEvent | TouchEvent) {
-      this.$emit("clickMask", e);
+      this.$emit('clickMask', e)
     },
     handleClickClose() {
-      this.$emit("closeModal");
+      this.$emit('closeModal')
     },
     // 对于中间的图片，当预览下一张时，getItemTransform 方法会做动画左移一个单位。showItems 列表会发生变化使 currentIndex 会从 1 变成 0，也相当于左移一个单位
     // 所以此时需要根据 virtualIndex 右移一个单位的来平衡其中一个左移即可
     getItemLeft(currentIndex: number) {
-      let index = this.virtualIndex + currentIndex;
+      let index = this.virtualIndex + currentIndex
       // 非循环模式的第一张图片不需要左移，因为只有两张图片，左侧没有图片
       if (this.loop || this.index !== 0) {
-        index -= 1;
+        index -= 1
       }
-      return `${(this.innerWidth + this.horizontalOffset) * index}px`;
+      return `${(this.innerWidth + this.horizontalOffset) * index}px`
     },
     getItemTransition() {
-      const transition = "transform 0.6s cubic-bezier(0.25, 0.8, 0.25, 1)";
+      const transition = 'transform 0.6s cubic-bezier(0.25, 0.8, 0.25, 1)'
       if (this.needTransition) {
-        return transition;
+        return transition
       }
       if (this.hasMove) {
-        return undefined;
+        return undefined
       }
-      return this.shouldTransition ? transition : undefined;
+      return this.shouldTransition ? transition : undefined
     },
     getItemTransform() {
       return `translate3d(${
-        -(this.innerWidth + this.horizontalOffset) * this.virtualIndex +
-        this.touchMoveX
-      }px, 0px, 0px)`;
+        -(this.innerWidth + this.horizontalOffset) * this.virtualIndex + this.touchMoveX
+      }px, 0px, 0px)`
     },
   },
-});
+})
 </script>
 
 <style lang="scss">

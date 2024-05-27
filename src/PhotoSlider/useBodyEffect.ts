@@ -1,14 +1,14 @@
-import { Ref, watch } from 'vue';
+import { Ref, watch } from 'vue'
 
 export default function useBodyEffect(visible: Ref<boolean>): void {
-  const { style } = document.body;
-  const originalOverflow = style.overflow;
+  const { style } = document.body
+  const originalOverflow = style.overflow
 
   watch(visible, () => {
     if (visible.value) {
-      style.overflow = 'hidden';
+      style.overflow = 'hidden'
     } else {
-      style.overflow = originalOverflow;
+      style.overflow = originalOverflow
     }
-  });
+  })
 }

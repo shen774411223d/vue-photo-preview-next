@@ -4,18 +4,18 @@
     class="PhotoView__PhotoWrap"
     :style="{
       width: `${width}px`,
-      height: `${height}px`
+      height: `${height}px`,
     }"
   >
     <div
       class="PhotoView__PhotoBox"
       :class="{
-        'PhotoView__animateIn': showAnimateType === ShowAnimateEnum.In,
-        'PhotoView__animateOut': showAnimateType === ShowAnimateEnum.Out,
+        PhotoView__animateIn: showAnimateType === ShowAnimateEnum.In,
+        PhotoView__animateOut: showAnimateType === ShowAnimateEnum.Out,
       }"
       :style="{
         transformOrigin: getAnimateOrigin(originRect) || 'center',
-        width: showAnimateType === ShowAnimateEnum.In || showAnimateType === ShowAnimateEnum.Out ? '0' : '100%'
+        width: showAnimateType === ShowAnimateEnum.In || showAnimateType === ShowAnimateEnum.Out ? '0' : '100%',
       }"
     >
       <img
@@ -30,25 +30,25 @@
         @mousedown.prevent="handleMouseDown"
         @touchstart.prevent="handleTouchStart"
         @wheel="handleWheel"
-      >
+      />
     </div>
   </div>
   <spinner v-else />
 </template>
 
-<script lang='ts'>
-import { defineComponent, PropType, toRefs } from 'vue';
-import Spinner from './Spinner.vue';
-import useLoadImage from './useLoadImage';
-import useWindowResize from './useWindowResize';
-import { OriginRectType, ShowAnimateEnum, TouchTypeEnum, EdgeTypeEnum } from '../types';
-import getAnimateOrigin from '../utils/getAnimateOrigin';
-import useMoveImage from './useMoveImage';
+<script lang="ts">
+import { defineComponent, PropType, toRefs } from 'vue'
+import Spinner from './Spinner.vue'
+import useLoadImage from './useLoadImage'
+import useWindowResize from './useWindowResize'
+import { OriginRectType, ShowAnimateEnum, TouchTypeEnum, EdgeTypeEnum } from '../types'
+import getAnimateOrigin from '../utils/getAnimateOrigin'
+import useMoveImage from './useMoveImage'
 
 export default defineComponent({
   name: 'PhotoView',
   components: {
-    Spinner
+    Spinner,
   },
   props: {
     /**
@@ -71,35 +71,62 @@ export default defineComponent({
     showAnimateType: {
       type: Number as PropType<ShowAnimateEnum>,
       default: null,
-    }
+    },
   },
   emits: ['touchStart', 'touchMove', 'touchEnd', 'singleTap'],
   setup(props, { emit }) {
-    const { src } = toRefs(props);
-    const { width, height, loaded, naturalWidth, naturalHeight, setSuitableImageSize } = useLoadImage(src);
+    const { src } = toRefs(props)
+    const { width, height, loaded, naturalWidth, naturalHeight, setSuitableImageSize } = useLoadImage(src)
 
     const onTouchStart = (clientX: number, clientY: number) => {
-      emit('touchStart', clientX, clientY);
-    };
-    const onTouchMove = (touchType: TouchTypeEnum, clientX: number, clientY: number, lastScale: number, edgeTypes: EdgeTypeEnum[]) => {
-      emit('touchMove', touchType, clientX, clientY, lastScale, edgeTypes);
-    };
-    const onTouchEnd = (touchType: TouchTypeEnum, clientX: number, clientY: number, lastScale: number, edgeTypes: EdgeTypeEnum[]) => {
-      emit('touchEnd', touchType, clientX, clientY, lastScale, edgeTypes);
-    };
+      emit('touchStart', clientX, clientY)
+    }
+    const onTouchMove = (
+      touchType: TouchTypeEnum,
+      clientX: number,
+      clientY: number,
+      lastScale: number,
+      edgeTypes: EdgeTypeEnum[],
+    ) => {
+      emit('touchMove', touchType, clientX, clientY, lastScale, edgeTypes)
+    }
+    const onTouchEnd = (
+      touchType: TouchTypeEnum,
+      clientX: number,
+      clientY: number,
+      lastScale: number,
+      edgeTypes: EdgeTypeEnum[],
+    ) => {
+      emit('touchEnd', touchType, clientX, clientY, lastScale, edgeTypes)
+    }
     const onSingleTap = (clientX: number, clientY: number, e: MouseEvent | TouchEvent) => {
-      emit('singleTap', clientX, clientY, e);
-    };
+      emit('singleTap', clientX, clientY, e)
+    }
 
     const {
-      x, y, scale, rotate, touched,
-      handleMouseDown, handleTouchStart, handleWheel, handleRotateLeft, handleRotateRight
+      x,
+      y,
+      scale,
+      rotate,
+      touched,
+      handleMouseDown,
+      handleTouchStart,
+      handleWheel,
+      handleRotateLeft,
+      handleRotateRight,
     } = useMoveImage(
-      width, height, naturalWidth, naturalHeight,
-      setSuitableImageSize, onTouchStart, onTouchMove, onTouchEnd, onSingleTap,
-    );
+      width,
+      height,
+      naturalWidth,
+      naturalHeight,
+      setSuitableImageSize,
+      onTouchStart,
+      onTouchMove,
+      onTouchEnd,
+      onSingleTap,
+    )
 
-    useWindowResize(naturalWidth, naturalHeight, rotate, setSuitableImageSize);
+    useWindowResize(naturalWidth, naturalHeight, rotate, setSuitableImageSize)
 
     return {
       width,
@@ -114,8 +141,8 @@ export default defineComponent({
       handleWheel,
       rotate,
       handleRotateLeft,
-      handleRotateRight
-    };
+      handleRotateRight,
+    }
   },
   data() {
     return {
@@ -123,35 +150,35 @@ export default defineComponent({
       // 翻转
       isFlipHorizontal: false,
       isFlipVertical: false,
-    };
+    }
   },
   methods: {
     getAnimateOrigin,
     toggleFlipHorizontal() {
-      this.isFlipHorizontal = !this.isFlipHorizontal;
+      this.isFlipHorizontal = !this.isFlipHorizontal
     },
     toggleFlipVertical() {
-      this.isFlipVertical = !this.isFlipVertical;
+      this.isFlipVertical = !this.isFlipVertical
     },
     getTransform() {
-      const scaleX = `${this.isFlipHorizontal ? '-' : ''}${this.scale}`;
-      const scaleY = `${this.isFlipVertical ? '-' : ''}${this.scale}`;
+      const scaleX = `${this.isFlipHorizontal ? '-' : ''}${this.scale}`
+      const scaleY = `${this.isFlipVertical ? '-' : ''}${this.scale}`
       const transform: Record<string, string> = {
         matrix: `${scaleX}, 0, 0, ${scaleY}, ${this.x}, ${this.y}`,
-      };
+      }
       if (this.rotate) {
-        transform.rotate = `${this.rotate}deg`;
+        transform.rotate = `${this.rotate}deg`
       }
 
-      let str = '';
-      Object.keys(transform).forEach(name => {
-        str += `${name}(${transform[name]})`;
-      });
+      let str = ''
+      Object.keys(transform).forEach((name) => {
+        str += `${name}(${transform[name]})`
+      })
 
-      return str;
-    }
-  }
-});
+      return str
+    },
+  },
+})
 </script>
 
 <style lang="scss">

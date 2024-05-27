@@ -21,16 +21,16 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType, provide } from "vue";
-import { updateItemKey, removeItemKey, handleShowKey } from "../symbols";
-import useItems from "./useItems";
-import useVisible from "./useVisible";
-import useIndex from "./useIndex";
-import PhotoSlider from "../PhotoSlider/index.vue";
-import { ItemType } from "../types";
+import { defineComponent, PropType, provide } from 'vue'
+import { updateItemKey, removeItemKey, handleShowKey } from '../symbols'
+import useItems from './useItems'
+import useVisible from './useVisible'
+import useIndex from './useIndex'
+import PhotoSlider from '../PhotoSlider/index.vue'
+import { ItemType } from '../types'
 
 export default defineComponent({
-  name: "PhotoProvider",
+  name: 'PhotoProvider',
   components: {
     PhotoSlider,
   },
@@ -96,25 +96,21 @@ export default defineComponent({
       default: null,
     },
   },
-  emits: ["indexChange", "visibleChange"],
+  emits: ['indexChange', 'visibleChange'],
   setup(_props, { emit }) {
     const onIndexChange = () => {
-      emit("indexChange", { index, items, visible });
-    };
+      emit('indexChange', { index, items, visible })
+    }
     const onVisibleChange = () => {
-      emit("visibleChange", { index, items, visible });
-    };
-    const { index, updateIndex } = useIndex(onIndexChange);
-    const { items, updateItem, removeItem } = useItems(index);
-    const { visible, handleHide, handleShow } = useVisible(
-      items,
-      index,
-      onVisibleChange
-    );
+      emit('visibleChange', { index, items, visible })
+    }
+    const { index, updateIndex } = useIndex(onIndexChange)
+    const { items, updateItem, removeItem } = useItems(index)
+    const { visible, handleHide, handleShow } = useVisible(items, index, onVisibleChange)
 
-    provide(updateItemKey, updateItem);
-    provide(removeItemKey, removeItem);
-    provide(handleShowKey, handleShow);
+    provide(updateItemKey, updateItem)
+    provide(removeItemKey, removeItem)
+    provide(handleShowKey, handleShow)
 
     return {
       items,
@@ -125,21 +121,21 @@ export default defineComponent({
       handleShow,
       index,
       updateIndex,
-    };
+    }
   },
   methods: {
     handleClickPhoto() {
       if (this.photoClosable) {
-        this.handleHide();
+        this.handleHide()
       }
     },
     handleClickMask() {
       if (this.maskClosable) {
-        this.handleHide();
+        this.handleHide()
       }
     },
   },
-});
+})
 </script>
 
 <style lang="scss"></style>
