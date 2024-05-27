@@ -6,11 +6,11 @@ vue3 的图片预览组件
 
 ```typescript
 // 隐藏顶部右侧操作栏
-type hideOperate = boolean;
+type hideOperate = boolean
 // 隐藏顶部左侧计数栏
-type hideCounter = boolean;
+type hideCounter = boolean
 // 隐藏底部图片信息
-type hideIntro = boolean;
+type hideIntro = boolean
 ```
 
 #### TODO:
@@ -41,10 +41,10 @@ npm install -S vue3-photo-preview
 ### 全局注册
 
 ```js
-import vue3PhotoPreview from 'vue3-photo-preview';
-import 'vue3-photo-preview/dist/index.css';
+import vue3PhotoPreview from 'vue3-photo-preview'
+import 'vue3-photo-preview/dist/index.css'
 
-app.use(vue3PhotoPreview);
+app.use(vue3PhotoPreview)
 ```
 
 ### 使用
@@ -115,28 +115,8 @@ app.use(vue3PhotoPreview);
 | changeIndex | 图片下标改变的回调 | newIndex                   |
 | closeModal  | 关闭预览的回调     | -                          |
 
-## 本地开发调试
+## USAGE
 
-1. 在根目录依次执行
+`npm install && npm run dev:preview`
 
-```bash
-# 安装依赖
-npm ci
-
-# 实时编译代码
-npm run dev
-```
-
-2. 进入 example 目录依次执行
-
-```bash
-# 安装依赖
-npm ci
-
-# 实时编译代码
-npm run dev
-```
-
-此时，修改 **根目录** 或者 **example 目录** 的任何代码都会导致项目重新打包构建。
-
-参考：[https://github.com/MinJieLiu/react-photo-view](https://github.com/MinJieLiu/react-photo-view)
+修改`/site`, `/src`下任何文件都会重新编译
