@@ -33,6 +33,16 @@ export default defineComponent({
       type: String,
       default: null,
     },
+    // 是否隐藏顶部计数
+    hideCounter: {
+      type: Boolean,
+      default: false,
+    },
+    // 是否隐藏顶部右侧操作区域
+    hideOperate: {
+      type: Boolean,
+      default: false,
+    },
     /**
      * 图片下载名称，默认图片名称
      */
@@ -47,7 +57,7 @@ export default defineComponent({
     const handleShow = inject(handleShowKey)
     const root = ref<HTMLElement | null>(null)
     const key = uniqueId()
-    const { src, intro, downloadName } = toRefs(props)
+    const { src, intro, downloadName, hideCounter, hideOperate } = toRefs(props)
 
     const handleClick = () => {
       handleShow?.(key)
@@ -57,6 +67,8 @@ export default defineComponent({
       src: src.value,
       originRef: root.value,
       intro: intro.value,
+      hideCounter: hideCounter.value,
+      hideOperate: hideOperate.value,
       downloadName: downloadName.value,
     })
 

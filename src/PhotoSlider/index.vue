@@ -19,11 +19,14 @@
         }"
         @animationend="onShowAnimateEnd(), resetBackdropOpacity()"
       />
-      <div class="PhotoSlider__BannerWrap">
+      <div
+        class="PhotoSlider__BannerWrap"
+        v-if="(!hideCounter || !hideOperate) && (!currentItemHideStatus.counter || !currentItemHideStatus.operate)"
+      >
         <div class="PhotoSlider__Counter">
-          <span v-if="!hideCounter">{{ index + 1 }} / {{ items.length }}</span>
+          <span v-if="!hideCounter && !currentItemHideStatus.counter">{{ index + 1 }} / {{ items.length }}</span>
         </div>
-        <div v-if="!hideOperate" class="PhotoSlider__BannerRight">
+        <div v-if="!hideOperate && !currentItemHideStatus.operate" class="PhotoSlider__BannerRight">
           <download class="PhotoSlider__BannerIcon" @click="handleDownload" />
           <rotate-left class="PhotoSlider__BannerIcon" @click="handleRotateLeft" />
           <rotate-right class="PhotoSlider__BannerIcon" @click="handleRotateRight" />
@@ -64,7 +67,7 @@
           <arrow-right />
         </div>
       </template>
-      <div v-if="!hideIntro && currentItem.intro" class="PhotoSlider__FooterWrap">
+      <div v-if="!hideIntro && currentItemHideStatus.intro" class="PhotoSlider__FooterWrap">
         {{ currentItem.intro }}
       </div>
     </div>
@@ -182,6 +185,14 @@ export default defineComponent({
       return items.value[index.value] || {}
     })
 
+    const currentItemHideStatus = computed(() => {
+      return {
+        intro: !!currentItem.value.intro,
+        counter: currentItem.value.hideCounter,
+        operate: currentItem.value.hideOperate,
+      }
+    })
+
     useBodyEffect(visible)
     const { photoVisible, showAnimateType, originRect, onShowAnimateEnd } = useAnimationHandle(visible, currentItem)
     const { innerWidth } = useInnerWidth()
@@ -189,6 +200,7 @@ export default defineComponent({
     return {
       innerWidth,
       currentItem,
+      currentItemHideStatus,
       photoVisible,
       showAnimateType,
       originRect,

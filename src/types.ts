@@ -7,6 +7,8 @@ export type ItemType = {
   originRef?: HTMLElement | null
   // 图片介绍
   intro?: string | null
+  hideOperate?: boolean
+  hideCounter?: boolean
   // 图片下载名称
   downloadName?: string | null
 }
