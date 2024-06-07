@@ -3,23 +3,13 @@
 layout: home
 
 hero:
-  name: "photo-preview-docs"
-  text: "docs and demo"
-  tagline: My great project tagline
+  name: 'photo-preview-docs'
+  text: '基于Vue3图片展示和预览插件'
   actions:
     - theme: brand
-      text: Markdown Examples
-      link: /markdown-examples
+      text: Demos
+      link: /demos
     - theme: alt
-      text: API Examples
-      link: /api-examples
-
-features:
-  - title: Feature A
-    details: Lorem ipsum dolor sit amet, consectetur adipiscing elit
-  - title: Feature B
-    details: Lorem ipsum dolor sit amet, consectetur adipiscing elit
-  - title: Feature C
-    details: Lorem ipsum dolor sit amet, consectetur adipiscing elit
+      text: Apis
+      link: /apis
 ---
-
