@@ -1,28 +1,30 @@
 export type ItemType = {
   // 唯一标识
-  key: string;
+  key: string
   // 图片地址
-  src: string;
+  src: string
   // 控住图片显示的节点
-  originRef?: HTMLElement | null;
+  originRef?: HTMLElement | null
   // 图片介绍
-  intro?: string | null;
+  intro?: string | null
+  hideOperate?: boolean
+  hideCounter?: boolean
   // 图片下载名称
-  downloadName?: string | null;
+  downloadName?: string | null
 }
 
 export type OriginRectType = {
-  left: number;
-  top: number;
-  width: number;
-  height: number;
-} | null;
+  left: number
+  top: number
+  width: number
+  height: number
+} | null
 
-export type UpdateItemType = (item: ItemType) => void;
+export type UpdateItemType = (item: ItemType) => void
 
-export type RemoveItemType = (key: string) => void;
+export type RemoveItemType = (key: string) => void
 
-export type HandleShowType = (key: string) => void;
+export type HandleShowType = (key: string) => void
 
 // 动画类型
 export enum ShowAnimateEnum {

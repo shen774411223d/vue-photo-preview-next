@@ -17,3 +17,7 @@ yarn-error.log*
 *.ntvs*
 *.njsproj
 *.sln
+
+# vitepress docs
+docs/.vitepress/dist
+docs/.vitepress/cache

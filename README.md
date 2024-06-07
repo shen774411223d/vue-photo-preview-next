@@ -2,22 +2,12 @@
 
 vue3 的图片预览组件
 
-#### 新增参数：`hideOperate` `hideCounter` `hideIntro`
-
-```typescript
-// 隐藏顶部右侧操作栏
-type hideOperate = boolean;
-// 隐藏顶部左侧计数栏
-type hideCounter = boolean;
-// 隐藏底部图片信息
-type hideIntro = boolean;
-```
-
 #### TODO:
 
-1. `hideOperate`和`hideCounter`参数没有和`imgItem`的参数结合，应向底部图片信息一样 做到每一张图片都能控制展示隐藏
-2. 本地`demo`运行报错，应切换到`vite+vue3`
-3. `scss => less`
+- [x] `hideOperate`和`hideCounter`参数没有和`photo-consumer`组件的参数结合，应向底部图片信息一样 做到每一张图片都能控制展示隐藏
+- [x] 本地`demo`运行报错，应切换到`vite+vue3`
+- [ ] `scss => less`
+- [x] 添加vite开发服务，`/site`文件夹启动后 可以在`/site/App.vue`中使用插件 快速调试
 
 ### 特点
 
@@ -26,8 +16,6 @@ type hideIntro = boolean;
 3. 支持左右切换导航、上/下滑关闭、双击放大/缩小、双指放大/缩小、键盘导航/关闭、点击切换控件、翻转、下载
 4. 图片尺寸自适应
 5. 图片切换、打开、关闭动画
-
-Demo: [https://namewjp.github.io/vue3-photo-preview/](https://namewjp.github.io/vue3-photo-preview/)
 
 ## 开始使用
 
@@ -40,10 +28,10 @@ npm install -S vue3-photo-preview
 ### 全局注册
 
 ```js
-import vue3PhotoPreview from "vue3-photo-preview";
-import "vue3-photo-preview/dist/index.css";
+import vue3PhotoPreview from 'vue3-photo-preview'
+import 'vue3-photo-preview/dist/index.css'
 
-app.use(vue3PhotoPreview);
+app.use(vue3PhotoPreview)
 ```
 
 ### 使用
@@ -64,31 +52,36 @@ app.use(vue3PhotoPreview);
 
 #### 属性
 
-| 名称                     | 类型                               | 描述                                 | 默认值 | 必填 |
-| :----------------------- | :--------------------------------- | :----------------------------------- | :----- | :--- |
-| photo-closable           | boolean                            | 图片点击是否关闭                     | false  | 否   |
-| mask-closable            | boolean                            | 背景点击是否关闭                     | true   | 否   |
-| should-transition        | boolean                            | 箭头切换是否需要过渡                 | false  | 否   |
-| default-backdrop-opacity | number                             | 默认背景透明度                       | 1      | 否   |
-| loop                     | boolean                            | 是否循环显示预览图                   | false  | 否   |
-| download-method          | (item: ItemType) => void&#124;null | 下载图片方法，不传使用内置的下载方法 | null   | 否   |
+| 名称                       | 类型                                 | 描述                                 | 默认值  | 必填 |
+| :------------------------- | :----------------------------------- | :----------------------------------- | :------ | :--- |
+| `photo-closable`           | `boolean`                            | 图片点击是否关闭                     | `false` | 否   |
+| `mask-closable`            | `boolean`                            | 背景点击是否关闭                     | `true`  | 否   |
+| `should-transition`        | `boolean`                            | 箭头切换是否需要过渡                 | `false` | 否   |
+| `default-backdrop-opacity` | `number`                             | 默认背景透明度                       | `1`     | 否   |
+| `loop`                     | `boolean`                            | 是否循环显示预览图                   | `false` | 否   |
+| `download-method`          | `(item: ItemType) => void&#124;null` | 下载图片方法，不传使用内置的下载方法 | `null`  | 否   |
+| `hide-counter`             | `boolean`                            | 隐藏顶部计数器组件                   | `false` | 否   |
+| `hide-operate`             | `boolean`                            | 隐藏顶部操作栏                       | `false` | 否   |
+| `hide-intro`               | `boolean`                            | 隐藏 底部说明                        | `false` | 否   |
 
 #### 事件
 
-| 名称          | 描述             | 参数                      |
-| :------------ | :--------------- | :------------------------ |
-| indexChange   | 图片切换回调     | { index, items, visible } |
-| visibleChange | 图片显隐切换回调 | { index, items, visible } |
+| 名称             | 描述             | 参数                        |
+| :--------------- | :--------------- | :-------------------------- |
+| `@indexChange`   | 图片切换回调     | `{ index, items, visible }` |
+| `@visibleChange` | 图片显隐切换回调 | `{ index, items, visible }` |
 
 ### PhotoConsumer
 
 #### 属性
 
-| 名称          | 类型   | 描述         | 默认值   | 必填 |
-| :------------ | :----- | :----------- | :------- | :--- |
-| src           | string | 图片地址     | -        | 是   |
-| intro         | string | 图片介绍     | -        | 否   |
-| download-name | string | 图片下载名称 | 图片名称 | 否   |
+| 名称            | 类型                          | 描述                       | 默认值   | 必填 |
+| :-------------- | :---------------------------- | :------------------------- | :------- | :--- |
+| `src`           | `string`                      | 图片地址                   | -        | 是   |
+| `intro`         | `string \| null \| undefined` | 图片介绍                   | -        | 否   |
+| `hide-counter`  | `boolean`                     | 隐藏单张图片顶部计数器组件 | `false`  | 否   |
+| `hide-operate`  | `boolean`                     | 隐藏单张图片顶部操作栏     | `false`  | 否   |
+| `download-name` | `string`                      | 图片下载名称               | 图片名称 | 否   |
 
 ### PhotoSlider
 
@@ -114,28 +107,8 @@ app.use(vue3PhotoPreview);
 | changeIndex | 图片下标改变的回调 | newIndex                   |
 | closeModal  | 关闭预览的回调     | -                          |
 
-## 本地开发调试
+## USAGE
 
-1. 在根目录依次执行
+`npm install && npm run dev:preview`
 
-```bash
-# 安装依赖
-npm ci
-
-# 实时编译代码
-npm run dev
-```
-
-2. 进入 example 目录依次执行
-
-```bash
-# 安装依赖
-npm ci
-
-# 实时编译代码
-npm run dev
-```
-
-此时，修改 **根目录** 或者 **example 目录** 的任何代码都会导致项目重新打包构建。
-
-参考：[https://github.com/MinJieLiu/react-photo-view](https://github.com/MinJieLiu/react-photo-view)
+修改`/site`, `/src`下任何文件都会重新编译
