@@ -22,19 +22,33 @@ vue3 的图片预览组件
 ### 安装
 
 ```
-npm install -S vue3-photo-preview
+npm install vue-photo-preview-next --save
 ```
 
 ### 全局注册
 
 ```js
-import vue3PhotoPreview from 'vue3-photo-preview'
+import photoPreview from 'vue-photo-preview-next'
 import 'vue3-photo-preview/dist/index.css'
 
-app.use(vue3PhotoPreview)
+app.use(photoPreview)
 ```
 
-### 使用
+```html
+<template>
+  <photo-provider>
+    <photo-consumer v-for="src in imgList" :intro="src" :key="src" :src="src">
+      <img :src="src" class="view-box" />
+    </photo-consumer>
+  </photo-provider>
+</template>
+```
+
+### 也可以局部使用
+```js
+import { PhotoConsumer, PhotoProvider } from 'vue-photo-preview-next';
+import 'vue3-photo-preview/dist/index.css'
+```
 
 ```html
 <template>
