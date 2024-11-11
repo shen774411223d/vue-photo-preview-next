@@ -1,6 +1,6 @@
 {
   "name": "vue-photo-preview-next",
-  "version": "0.0.6",
+  "version": "0.0.8",
   "description": "Based on vue3 development, a preview image plugin that supports both PC and mobile.",
   "main": "dist/vue-photo-preview-next.umd.js",
   "module": "dist/vue-photo-preview-next.esm.js",
