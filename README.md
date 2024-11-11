@@ -29,7 +29,7 @@ npm install vue-photo-preview-next --save
 
 ```js
 import photoPreview from 'vue-photo-preview-next'
-import 'vue3-photo-preview/dist/index.css'
+import 'vue-photo-preview-next/dist/index.css'
 
 app.use(photoPreview)
 ```
@@ -48,7 +48,7 @@ app.use(photoPreview)
 
 ```js
 import { PhotoConsumer, PhotoProvider } from 'vue-photo-preview-next'
-import 'vue3-photo-preview/dist/index.css'
+import 'vue-photo-preview-next/dist/index.css'
 ```
 
 ```html
