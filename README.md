@@ -45,8 +45,9 @@ app.use(photoPreview)
 ```
 
 ### 也可以局部使用
+
 ```js
-import { PhotoConsumer, PhotoProvider } from 'vue-photo-preview-next';
+import { PhotoConsumer, PhotoProvider } from 'vue-photo-preview-next'
 import 'vue3-photo-preview/dist/index.css'
 ```
 
@@ -126,3 +127,7 @@ import 'vue3-photo-preview/dist/index.css'
 `npm install && npm run dev:preview`
 
 修改`/site`, `/src`下任何文件都会重新编译
+
+## node版本
+
+如果你想拉取源码进行自定义开发。推荐的node版本为 >= 18.x
